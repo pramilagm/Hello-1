@@ -1,4 +1,4 @@
-# Hello
+# Hello MEAN STACK * APPLICATION using MEAN
 
 
 Login and Email -- (ZacK , Pramila, Karina)
