@@ -1,0 +1,10 @@
+<h1>No messages found...</h1>
+{{#each messages}}
+<p>{{fullname}}</p>
+<p>{{email}}</p>
+<p>{{message}}</p>
+<small>{{date}}</small>
+<hr>
+{{else}}
+<p>No messages..</p>
+<a href="/"><button class="btn btn-danger">Go Back</button></a>
