@@ -17,13 +17,15 @@ const app = express();
 const Keys = require('./config/keys');
 
 //use body parser middleware
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(bodyParser.json());
 
 //configuration for authentication
 app.use(cookieParser());
 app.use(session({
-    secret: 'mysecret',
+    secret: 'hooplahMedoozalah',
     resave: true,
     saveUninitialized: true
 }));
@@ -35,7 +37,9 @@ app.use(passport.session());
 require('./passport/facebook');
 
 //connect to mLab MongoDB
-mongoose.connect(Keys.MongoDB, { useNewUrlParser: true }).then(() => {
+mongoose.connect(Keys.MongoDB, {
+    useNewUrlParser: true
+}).then(() => {
     console.log('Server is conncted to MongoDB');
 }).catch((err) => {
     console.log(err);
@@ -44,7 +48,9 @@ mongoose.connect(Keys.MongoDB, { useNewUrlParser: true }).then(() => {
 // environment variable for port
 const port = process.env.PORT || 3000;
 //set up view engine 
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.engine('handlebars', exphbs({
+    defaultLayout: 'main'
+}));
 app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
@@ -75,7 +81,9 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', {
 }));
 
 app.get('/profile', (req, res) => {
-    User.findById({ _id: req.user._id }).then((user) => {
+    User.findById({
+        _id: req.user._id
+    }).then((user) => {
         if (user) {
             user.online = true;
             user.save((err, user) => {
@@ -93,7 +101,9 @@ app.get('/profile', (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-    User.findById({ _id: req.user._id })
+    User.findById({
+            _id: req.user._id
+        })
         .then((user) => {
             user.online = false;
             user.save((err, user) => {
