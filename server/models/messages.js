@@ -9,14 +9,13 @@ const messagesSchema = new Schema({
         type: String
     },
 
-    messages: {
+    message: {
         type: String
     },
     date: {
         type: Date,
         default: Date.now
     }
-
 });
 
-module.export = mongoose.model('Message', messagesSchema);
+const Message = mongoose.model('Message', messagesSchema);
