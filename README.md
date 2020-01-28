@@ -24,13 +24,13 @@ Deployment AWS  S3 Storage
 
 UX Design
 
-Send Smile & Hearts
+Send Smile & Hearts KARINA
 
-Notification (alert)
+Notification (alert) KARINA
 
-Chat History
+Chat History KARINA
 
-Accepting Payments
+Accepting Payments KARINA
 
 Share Post
 
