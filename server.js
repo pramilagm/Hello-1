@@ -59,11 +59,8 @@ app.use((req, res, next) => {
 
 //load facebook / google strategy
 require('./passport/facebook');
-<<<<<<< HEAD
 require('./passport/google');
 
-=======
->>>>>>> f491b07b916bf606a137502005391f846f551c74
 //connect to mLab MongoDB
 mongoose.connect(Keys.MongoDB, {
     useNewUrlParser: true
@@ -76,7 +73,6 @@ mongoose.connect(Keys.MongoDB, {
 // environment variable for port
 const port = process.env.PORT || 3000;
 //set up view engine 
-<<<<<<< HEAD
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
@@ -221,16 +217,11 @@ app.post('/contactUs', (req, res) => {
         }
     });
 });
-=======
-app.engine('handlebars', exphbs({
-    defaultLayout: 'main'
-}));
-app.set('view engine', 'handlebars');
+
 require("./server/config/mongoose.js");
 require("./server/config/routes.js")(app);
 
 
->>>>>>> f491b07b916bf606a137502005391f846f551c74
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
