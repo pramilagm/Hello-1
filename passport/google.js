@@ -1,26 +1,27 @@
 const passport = require('passport');
-const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user');
 const keys = require('../config/keys');
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    return done(null, user.id);
 });
-
 passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => {
-        done(err, user);
+        return done(err, user);
     });
 });
 
-passport.use(new FacebookStrategy({
-    clientID: keys.FacebookAppID,
-    clientSecret: keys.FacebookAppSecret,
-    callbackURL: 'http://localhost:3000/auth/facebook/callback',
-    profileFields: ['email', 'name', 'displayName', 'photos']
+passport.use(new GoogleStrategy({
+    clientID: keys.GoogleClientID,
+    clientSecret: keys.GoogleClientSecret,
+    callbackURL: 'http://localhost:3000/auth/google/callback'
+
 }, (accessToken, refreshToken, profile, done) => {
     console.log(profile);
-    User.findOne({ facebook: profile.id }, (err, user) => {
+
+
+    User.findOne({ google: profile.id }, (err, user) => {
         if (err) {
             return done(err);
         }
@@ -28,12 +29,11 @@ passport.use(new FacebookStrategy({
             return done(null, user);
         } else {
             const newUser = {
-                facebook: profile._id,
-                fullname: profile.displayName,
-                lastname: profile.name.familyName,
                 firstname: profile.name.givenName,
-                image: `https://graph.facebook.com/${profile.id}/picture?type=large`,
-                email: profile.emails[0].value
+                lastname: profile.name.familyName,
+                image: profile.photos[0].value,
+                fullname: profile.displayName,
+                google: profile.id
 
             }
             new User(newUser).save((err, user) => {
@@ -45,5 +45,6 @@ passport.use(new FacebookStrategy({
                 }
             });
         }
+
     });
 }));

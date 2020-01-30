@@ -9,7 +9,7 @@ const messagesSchema = new Schema({
         type: String
     },
 
-    messages: {
+    message: {
         type: String
     },
     date: {
@@ -19,4 +19,4 @@ const messagesSchema = new Schema({
 
 });
 
-module.export = mongoose.model('Message', messagesSchema);
+module.exports = mongoose.model('Message', messagesSchema);

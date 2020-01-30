@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const flash = require('connect-flash');
+const bcrypt = require('bcryptjs');
 const passportFacebook = require('passport-facebook');
+const passportGoogle = require('passport-google-oauth20');
 
 
 //Load models
@@ -13,8 +16,12 @@ const Message = require('./models/messages.js');
 const User = require('./models/user');
 const app = express();
 
+
 //load keys file
 const Keys = require('./config/keys');
+
+//Load Helpers
+const { requireLogin, ensureGuest } = require('./helpers/auth.js');
 
 //use body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,9 +37,27 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
+});
 
-//load facebook strategy
+//set up express static folder to serve js, css files
+app.use(express.static('public'));
+
+//Make user global object
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+});
+
+
+//load facebook / google strategy
 require('./passport/facebook');
+require('./passport/google');
 
 //connect to mLab MongoDB
 mongoose.connect(Keys.MongoDB, { useNewUrlParser: true }).then(() => {
@@ -47,13 +72,13 @@ const port = process.env.PORT || 3000;
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
-app.get('/', (req, res) => {
+app.get('/', ensureGuest, (req, res) => {
     res.render('home', {
         title: 'Home'
     });
 });
 
-app.get('/about', (req, res) => {
+app.get('/about', ensureGuest, (req, res) => {
     res.render('about', {
         title: 'About'
     });
@@ -73,8 +98,14 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', {
     successRedirect: '/profile',
     failureRedirect: '/'
 }));
-
-app.get('/profile', (req, res) => {
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ['profile']
+}));
+app.get('/auth/google/callback', passport.authenticate('google', {
+    successRedirecty: '/profile',
+    failureRedirect: '/'
+}));
+app.get('/profile', requireLogin, (req, res) => {
     User.findById({ _id: req.user._id }).then((user) => {
         if (user) {
             user.online = true;
@@ -91,7 +122,54 @@ app.get('/profile', (req, res) => {
         }
     });
 });
+app.get('/newAccount', (req, res) => {
+    res.render('newAccount', {
+        title: 'Signup'
+    });
+});
+app.post('/signup', (req, res) => {
+    console.log(req.body);
+    let errors = [];
 
+    if (req.body.password !== req.body.password2) {
+        errors.push({ text: 'Password does not match' });
+    }
+    if (req.body.password.length < 5) {
+        errors.push({ text: 'Password must be at least 5 characters' });
+    }
+    if (errors.length > 0) {
+        res.render('newAccount', {
+            errors: errors,
+            title: 'Error',
+            fullname: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            password2: req.body.password2
+        });
+    } else {
+        User.findOne({ email: req.body.email })
+            .then((user) => {
+                if (user) {
+                    let errors = [];
+                    errrors.push({ text: 'Email already exists' });
+                    res.render('newAccount'), {
+                        title: 'SignUp',
+                        errors: errors
+                    };
+
+                } else {
+                    var salt = bcrypt.genSaltSync(10);
+                    var hash = bcrypt.hashSync(req.body.password, salt);
+                    const newUser = {
+                        fullname: req.body.username,
+                        email: req.body.email,
+                        password: hash
+                    }
+                    console.log(newUser);
+                }
+            })
+    }
+});
 app.get('/logout', (req, res) => {
     User.findById({ _id: req.user._id })
         .then((user) => {
@@ -108,10 +186,10 @@ app.get('/logout', (req, res) => {
         })
 });
 
-app.post('/contactUs', (res, req) => {
+app.post('/contactUs', (req, res) => {
     console.log(req.body);
     const newMessage = {
-        fullname: req.body.fullname,
+        full_name: req.body.fullname,
         email: req.body.email,
         message: req.body.message,
         date: new Date()
@@ -120,11 +198,11 @@ app.post('/contactUs', (res, req) => {
         if (err) {
             throw err;
         } else {
-            Message.find({}).then((messages) => {
-                if (messages) {
+            Message.find({}).then((message) => {
+                if (message) {
                     res.render('newmessage', {
                         tittle: 'Sent',
-                        messages: messages
+                        messages: message
                     });
                 } else {
                     res.render('noMessage', {
