@@ -1,5 +1,5 @@
 const helloController = require("../controllers/users");
-module.exports = function (app) {
+module.exports = function(app) {
     app.get("/", helloController.homePage);
 
     app.get("/about", helloController.aboutPage);
@@ -12,4 +12,8 @@ module.exports = function (app) {
     app.get("/logout", helloController.logout);
     app.get('/auth/facebook', helloController.facebookAuth);
     app.get('/auth/facebook/callback', helloController.AuthenticateUser);
+
+    //app.get('/auth/google', helloController.googleAuth);
+    //app.get('/auth/google/callback', helloControler.AuthenticateUser);
+
 }

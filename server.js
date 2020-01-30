@@ -12,10 +12,12 @@ const passportGoogle = require('passport-google-oauth20');
 
 
 //Load models
-const Message = require('./models/messages.js');
-const User = require('./models/user');
+//const Message = require('./models/messages');
+//const User = require('./models/user');
 const app = express();
 
+require("./server/config/mongoose.js");
+require("./server/config/routes.js")(app);
 
 //load keys file
 const Keys = require('./config/keys');
@@ -218,8 +220,7 @@ app.post('/contactUs', (req, res) => {
     });
 });
 
-require("./server/config/mongoose.js");
-require("./server/config/routes.js")(app);
+
 
 
 

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -21,5 +20,3 @@ const messagesSchema = new Schema({
 });
 
 module.exports = mongoose.model('Message', messagesSchema);
-=======
->>>>>>> f491b07b916bf606a137502005391f846f551c74

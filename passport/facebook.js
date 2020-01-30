@@ -1,6 +1,8 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
-const User = require('../models/user');
+const mongoose = require("mongoose");
+const User = mongoose.model("User");
+
 const keys = require('../config/keys');
 
 passport.serializeUser((user, done) => {
