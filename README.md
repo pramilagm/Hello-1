@@ -3,14 +3,14 @@
 
 Login and Email -- (ZacK , Pramila, Karina)
 
-Socket.io 
+Socket.io done by K
 
-Deployment
+Deployment done by K
 
-Mongo DB
+Mongo DB done by K
 
-Mongoose 
-Login with Facebook, Google, Email
+Mongoose done by K
+Login with Facebook, Google, Email done by K
 
 Access Control
 

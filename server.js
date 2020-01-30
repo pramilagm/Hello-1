@@ -24,13 +24,15 @@ const Keys = require('./config/keys');
 const { requireLogin, ensureGuest } = require('./helpers/auth.js');
 
 //use body parser middleware
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(bodyParser.json());
 
 //configuration for authentication
 app.use(cookieParser());
 app.use(session({
-    secret: 'mysecret',
+    secret: 'hooplahMedoozalah',
     resave: true,
     saveUninitialized: true
 }));
@@ -57,10 +59,15 @@ app.use((req, res, next) => {
 
 //load facebook / google strategy
 require('./passport/facebook');
+<<<<<<< HEAD
 require('./passport/google');
 
+=======
+>>>>>>> f491b07b916bf606a137502005391f846f551c74
 //connect to mLab MongoDB
-mongoose.connect(Keys.MongoDB, { useNewUrlParser: true }).then(() => {
+mongoose.connect(Keys.MongoDB, {
+    useNewUrlParser: true
+}).then(() => {
     console.log('Server is conncted to MongoDB');
 }).catch((err) => {
     console.log(err);
@@ -69,6 +76,7 @@ mongoose.connect(Keys.MongoDB, { useNewUrlParser: true }).then(() => {
 // environment variable for port
 const port = process.env.PORT || 3000;
 //set up view engine 
+<<<<<<< HEAD
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
@@ -213,6 +221,16 @@ app.post('/contactUs', (req, res) => {
         }
     });
 });
+=======
+app.engine('handlebars', exphbs({
+    defaultLayout: 'main'
+}));
+app.set('view engine', 'handlebars');
+require("./server/config/mongoose.js");
+require("./server/config/routes.js")(app);
+
+
+>>>>>>> f491b07b916bf606a137502005391f846f551c74
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
