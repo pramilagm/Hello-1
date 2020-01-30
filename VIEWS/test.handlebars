@@ -1,0 +1,159 @@
+<style>
+    .msg_left {
+        filter: alpha(opacity=50);
+        /* For IE8 and earlier */
+        border-radius: 4px;
+        border-bottom-right-radius: 2.5em;
+        box-shadow: -0.5rem -0.5rem grey;
+        background-color: rgb(67, 147, 201);
+        text-align: left;
+        margin-bottom: 2rem;
+    }
+
+    body {
+        background-color: rgb(29, 27, 27);
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .msg_right {
+        filter: alpha(opacity=50);
+        /* For IE8 and earlier */
+        border-radius: 4px;
+        border-top-left-radius: 2em;
+        box-shadow: 1rem 1rem grey;
+        text-align: right;
+        display: inline-block;
+        cursor: pointer;
+        text-align: right;
+        transition-property: all;
+        transition-duration: 0.3s;
+        background-color: azure;
+        transition-timing-function: ease;
+    }
+
+    .msg {
+        margin: 2em;
+        font-size: 2rem;
+    }
+
+    .msg_left:hover {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        /* For IE8 and earlier */
+        box-shadow: 1rem 1rem #050505;
+        transition-property: box-shadow, transform, color, background-color,
+            border-bottom-color, fill, visibility;
+        transition-duration: 0.3s;
+        transition-timing-function: ease;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .msg_right:hover {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        /* For IE8 and earlier */
+        box-shadow: 1rem -1rem black;
+
+        transition-property: box-shadow, transform, color, background-color,
+            border-bottom-color, fill, visibility;
+        transition-duration: 0.3s;
+        transition-timing-function: ease;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #chatbox {
+
+        margin-bottom: 10px;
+        padding: 1rem;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+</style>
+<script>
+
+    $(document).ready(function () {
+        var socket = io();
+        var name = prompt("Please enter your name");
+        if (!name) {
+            alert("please enter an name first");
+        } else {
+            socket.emit("new_user", {
+                name: name
+            });
+        }
+        var elem = document.getElementById('chatbox');
+        $("#btn").click(function () {
+            socket.emit("new_message", {
+                name: name,
+                message: $('#msg').val()
+            });
+            $('#msg').val("");
+        });
+        socket.on('existing_messages', function (data) {
+            for (i in data)
+                $("#chatbox").append("<p>" + data[i].name + ": " + data[i].message + "</p>");
+            elem.scrollTop = elem.scrollHeight;
+        });
+        socket.on('update_messages', function (data) {
+            $("#chatbox").append("<p>" + data.name + ": " + data.message + "</p>");
+            elem.scrollTop = elem.scrollHeight;
+        });
+        socket.on('user_disconnect', function (data) {
+            $("#chatbox").append("<p style='color:red'>" + data.name + " has left the chat" + "</p>");
+            elem.scrollTop = elem.scrollHeight;
+        });
+        socket.on('display_new_user', function (data) {
+            $("#chatbox").append("<p style='color:green'>" + data.name + " has joined the chat" +
+                "</p>");
+            elem.scrollTop = elem.scrollHeight;
+        });
+
+        $('#emojis').click(function () {
+            emojis = ['&#x1F929;', '&#x1F60D;', '&#x1F600;', '&#128541;', '&#x1F602;', '&#10084;'];
+
+            for (var emoji of emojis) {
+                $('#showemoji').append(`<span class="getEmoji" style='font-size:60px;'>  ${emoji} </span>`)
+
+            }
+            $('.getEmoji').click(function () {
+                $(this).text();
+                $('#msg').val($(this).text());
+                $('#btn').click(function () {
+                    $('#emojis').hide();
+                })
+            })
+
+        })
+
+    })
+</script>
+<div class="container" id="chatbox">
+
+    <div class="d-flex  flex-row-reverse">
+        <div class="container p-3  mb-10  msg msg_right">
+            <h2 id="msg">Message Right</h2>
+        </div>
+    </div>
+
+    <!-- MESSAGE -->
+
+    <div class=" d-flex flex-row-reverse">
+        <div class="container p-3 d-flex mb-10  msg msg_right">
+            <h2></h2>
+        </div>
+    </div> <!-- MESSAGE -->
+
+    <div class="col-7 msg msg_left border border-primary my-10 transparent" hidden>
+
+    </div>
+    <!-- MESSAGE -->
+
+    <textarea id="msg" class="msg bg-secondary round form-control" name="userMessage" cols="90" rows="3" required>
+</textarea>
+    <button id="btn" class="btn btn-primary"> Send Message</button>
+</div>

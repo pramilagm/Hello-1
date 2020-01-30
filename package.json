@@ -14,9 +14,11 @@
         "express": "^4.17.1",
         "express-handlebars": "^3.1.0",
         "express-session": "^1.17.0",
+        "horoscope": "^2.0.1",
         "mongoose": "^5.8.7",
         "passport": "^0.4.1",
-        "passport-facebook": "^3.0.0"
+        "passport-facebook": "^3.0.0",
+        "socket.io": "^2.3.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.2"

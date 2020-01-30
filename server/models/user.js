@@ -16,11 +16,6 @@ const userSchema = new Schema({
     fullname: {
         type: String
     },
-
-    image: {
-        type: String
-    },
-
     email: {
         type: String
     },
@@ -44,6 +39,42 @@ const userSchema = new Schema({
         default: 0
     },
 
+    message: String,
+    userImage: {
+        type: String,
+        default: 'default.png'
+    },
+    sentRequest: [{
+        username: {
+            type: String,
+            default: ''
+        }
+    }],
+    request: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        username: {
+            type: String,
+            default: ''
+        }
+    }],
+    friendsList: [{
+        friendId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        friendName: {
+            type: String,
+            default: ''
+        }
+    }],
+    totalRequest: {
+        type: Number,
+        default: 0
+    }
+
 });
 
-const User = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

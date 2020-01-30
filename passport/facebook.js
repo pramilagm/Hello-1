@@ -1,7 +1,9 @@
 const passport = require('passport');
+const mongoose = require('mongoose');
 const FacebookStrategy = require('passport-facebook').Strategy;
-const User = require('../models/user');
+require("../server/config/mongoose.js");
 const keys = require('../config/keys');
+const User = mongoose.model('User');
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -20,7 +22,9 @@ passport.use(new FacebookStrategy({
     profileFields: ['email', 'name', 'displayName', 'photos']
 }, (accessToken, refreshToken, profile, done) => {
     console.log(profile);
-    User.findOne({ facebook: profile.id }, (err, user) => {
+    User.findOne({
+        facebook: profile.id
+    }, (err, user) => {
         if (err) {
             return done(err);
         }
