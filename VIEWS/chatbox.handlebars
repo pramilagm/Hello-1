@@ -1,3 +1,35 @@
+<style>
+    p {
+        font-size: larger;
+    }
+
+    #chatbox {
+        height: 500px;
+        margin-bottom: 10px;
+        padding: 1rem;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    #title {
+        margin-left: 1.40rem;
+    }
+
+    #msg {
+        width: 40rem;
+        height: 2rem;
+        margin: 0.50rem 1.40rem;
+    }
+
+    #btn {
+        display: block;
+        float: right;
+        padding: 0.50rem;
+        margin-right: 1.40rem;
+        font-weight: bold;
+    }
+</style>
+
 <script>
     $(document).ready(function () {
         var socket = io();
@@ -35,16 +67,26 @@
                 "</p>");
             elem.scrollTop = elem.scrollHeight;
         });
+        $('#emojis').click(function () {
+            emojis = ['&#x1F929;', '&#x1F60D;', '&#x1F600;', '&#128541;', '&#x1F602;', '&#10084;'];
+            for (var emoji of emojis) {
+                $('#showemoji').append(`<span class="getEmoji" style='font-size:60px;'>  ${emoji} </span>`)
+            }
+            $('.getEmoji').click(function () {
+                $(this).text();
+                $('#msg').val($(this).text());
+            })
+        })
     })
 </script>
 
 <body>
+    <p id="name">{{loggedinUser.fullname }}</p>
     <div id="container">
         <h1 id="title"><u>Conversation Board</u></h1>
         <div id="chatbox"></div>
         <input id="msg" type="text">
+        <button id="showemoji"></button>
+        <button id="emojis">Send Emoji</button>
         <button id="btn">Send</button>
     </div>
-
-
-</body>

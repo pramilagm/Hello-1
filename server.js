@@ -295,6 +295,9 @@ app.get("/chat", (req, res) => {
     res.render("chatbox");
 });
 // create server's connection listener to run, and this occurs for every new socket connection
+var users = {};
+var id = 0;
+var messages = {};
 io.on("connection", function (socket) {
     console.log("Connected!");
 
@@ -303,10 +306,10 @@ io.on("connection", function (socket) {
             name: data.name
         };
         console.log(users[socket.id]);
-        socket.emit('existing_messages', messages);
+        socket.emit("existing_messages", messages);
         io.emit("display_new_user", {
             name: data.name
-        })
+        });
     });
     socket.on("new_message", function (data) {
         messages[id] = {
@@ -315,8 +318,9 @@ io.on("connection", function (socket) {
         };
         io.emit("update_messages", messages[id]);
         id++;
-    })
+    });
     socket.on("disconnect", function () {
-        io.emit("user_disconnect", users[socket.id])
-    })
-})
+        io.emit("user_disconnect", users[socket.id]);
+    });
+});
+//end of socket
