@@ -1,5 +1,5 @@
 const passport = require('passport');
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const passportFacebook = require('passport-facebook');
 const User = mongoose.model("User");
 const Message = mongoose.model('Message');
@@ -53,7 +53,7 @@ module.exports = {
     profilePage: (req, res) => {
         {
             User.findById({
-                _id: req.user._id
+                _id: req.params._id
             }).then((user) => {
                 if (user) {
                     user.online = true;

@@ -1,7 +1,7 @@
 const passport = require('passport');
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const passportFacebook = require('passport-facebook');
-const User = mongoose.model("User");
+const User = mongoose.model('User');
 const Message = mongoose.model('Message');
 module.exports = {
     homePage: function(req, res) {

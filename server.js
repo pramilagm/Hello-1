@@ -16,6 +16,9 @@ const passportGoogle = require('passport-google-oauth20');
 //const User = require('./models/user');
 const app = express();
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 require("./server/config/mongoose.js");
 require("./server/config/routes.js")(app);
 
@@ -39,8 +42,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
+
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
@@ -62,6 +64,7 @@ app.use((req, res, next) => {
 //load facebook / google strategy
 require('./passport/facebook');
 require('./passport/google');
+require('./passport/local');
 
 //connect to mLab MongoDB
 mongoose.connect(Keys.MongoDB, {
@@ -171,11 +174,33 @@ app.post('/signup', (req, res) => {
                         email: req.body.email,
                         password: hash
                     }
-                    console.log(newUser);
+                    new User(newUser).save((err, user) => {
+                        if (err) {
+                            throw err;
+                        }
+                        if (user) {
+                            let succes = [];
+                            success.push({ text: "You successfully created an account. You can login now" });
+                            res.render('home', {
+                                errors: success
+                            });
+                        }
+                    })
                 }
             })
     }
 });
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/profile',
+    failureRedirect: '/loginErrors'
+}));
+app.get('/loginErrors', (req, res) => {
+    let errors = [];
+    errors.push({ text: 'User Not Found or Password Incorrect' });
+    res.render('home', {
+        errors: errors
+    })
+})
 app.get('/logout', (req, res) => {
     User.findById({ _id: req.user._id })
         .then((user) => {

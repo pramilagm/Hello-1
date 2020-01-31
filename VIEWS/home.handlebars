@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <h1>Welcome to Hello, The Online Dating You will Find what you are looking for!</h1>
 {{#if user}}
 <p>You are logged in...</p>
@@ -17,7 +16,13 @@
                         </a>
             </h1>
         <p class="center">or </p>
-        <form action="/login">
+        <form action="/login" method="POST">
+        {{#each success}}
+        <p class="green">{{text}}</p>
+        {{/each}}
+        {{#each errors}}
+        {{/each}}
+        <p class="red">{{text}}</p>
         <div class="form-group">
             <label for="email">Email</label>
             <input type="text "  name="email"  id="email" class="form-control">
@@ -36,9 +41,6 @@
 </div>
 
 {{/if}}
-=======
-<h1>Hello, it's me you were looking for.</h1>
-<a href="/auth/facebook">
-    <button type="button" class="btn btn-primary btn-lg">Login with FaceBook</button>
-</a>
->>>>>>> f491b07b916bf606a137502005391f846f551c74
+
+
+
