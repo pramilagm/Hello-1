@@ -1,22 +1,21 @@
-<h1>Welcome to Hello, The Online Dating You will Find what you are looking for!</h1>
+<h1 class="h3 ml-3 font-weight-light text-light"> Is it me you were looking for? </span></h1>
 {{#if user}}
 <p>You are logged in...</p>
 {{else}}
+
 <div class="row">
     <div class="col-sm-4">
-        <h1 class="center">
-            <a href="/auth/facebook">
-                <button type="button" class="btn btn-primary btn-lg">Login with FaceBook</button>
-            </a>
-        </h1>
 
-        <h1 class="center">
-            <a href="/auth/google">
-                <button type="button" class="btn btn-danger btn-lg">Login with Google</button>
-            </a>
-        </h1>
         <p class="center">or </p>
-        <form action="/login">
+        <form action="/login" method="POST">
+
+            {{#each success}}
+            <p class="green">{{text}}</p>
+            {{/each}}
+            {{#each errors}}
+            {{/each}}
+            <p class="red">{{text}}</p>
+
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="text " name="email" id="email" class="form-control">
@@ -27,11 +26,24 @@
                 <label for="password">Password</label>
                 <input type="password " name="password " id="password " class="form-control">
             </div>
+
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
         <a href="/newAccount">Need Account?</a>
     </div>
 
 </div>
+
+<h1 class="center">
+    <a href="/auth/facebook">
+        <button type="button" class="btn btn-primary btn-lg">Login with FaceBook</button>
+    </a>
+</h1>
+
+<h1 class="center">
+    <a href="/auth/google">
+        <button type="button" class="btn btn-danger btn-lg">Login with Google</button>
+    </a>
+</h1>
 
 {{/if}}

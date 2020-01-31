@@ -13,6 +13,7 @@ const app = express();
 const User = require("./models/user");
 const Message = require("./models/messages");
 const searchfriends = require("./routes/friends.js");
+const Chat = require('./models/chat')
 //load keys file
 const Keys = require("./config/keys");
 //Load Helpers

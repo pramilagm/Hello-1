@@ -1,3 +1,22 @@
 .center {
-    text-align: center;
+  text-align: center;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+.rounded {
+  border-radius: 20px;
+}
+img {
+  height: 45px;
+  width: auto;
+}
+#wink {
+  height: 32px;
+  width: auto;
 }
