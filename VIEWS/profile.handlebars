@@ -14,4 +14,32 @@
         <h5 class="card-title">{{user.fullname}}</h5>
         <p class="card-text">{{user.email}}</p>
     </div>
+
+    {{#if user.request}}
+    {{#each newfriend}}
+    <li style="border-bottom: 1px solid lightgray">
+        <a href="#">
+            <div>
+                <h4>{{this.username}}</h4>
+            </div>
+            <div>
+
+                <div style="width: 50%; display: inline;">
+                    <input type="hidden" name="senderId" id="senderId" value="{{this.userId}}">
+                    <input type="hidden" name="senderName" id="senderName" value="{{this.username}}">
+                    <button type="submit" id="accept_friend" class="btn btn-primary" style="width: 8em">Accept</button>
+                </div>
+                <div style="width: 50%;  display: inline;">
+                    <input type="hidden" name="user_Id" id="user_Id" value="{{this.userId}}">
+                    <button type="submit" id="cancel_friend" class="btn btn-primary" style="width: 8em">Cancel</button>
+                </div>
+            </div>
+        </a>
+    </li>
+    {{/each}}
+    {{else}}
+    <div>
+        <h4 style="text-align:center">No requests</h4>
+    </div>
+    {{/if}}
 </div>

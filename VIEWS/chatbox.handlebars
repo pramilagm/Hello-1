@@ -1,0 +1,50 @@
+<script>
+    $(document).ready(function () {
+        var socket = io();
+        var name = prompt("Please enter your name");
+        if (!name) {
+            alert("please enter an name first");
+        } else {
+            socket.emit("new_user", {
+                name: name
+            });
+        }
+        var elem = document.getElementById('chatbox');
+        $("#btn").click(function () {
+            socket.emit("new_message", {
+                name: name,
+                message: $('#msg').val()
+            });
+            $('#msg').val("");
+        });
+        socket.on('existing_messages', function (data) {
+            for (i in data)
+                $("#chatbox").append("<p>" + data[i].name + ": " + data[i].message + "</p>");
+            elem.scrollTop = elem.scrollHeight;
+        });
+        socket.on('update_messages', function (data) {
+            $("#chatbox").append("<p>" + data.name + ": " + data.message + "</p>");
+            elem.scrollTop = elem.scrollHeight;
+        });
+        socket.on('user_disconnect', function (data) {
+            $("#chatbox").append("<p style='color:red'>" + data.name + " has left the chat" + "</p>");
+            elem.scrollTop = elem.scrollHeight;
+        });
+        socket.on('display_new_user', function (data) {
+            $("#chatbox").append("<p style='color:green'>" + data.name + " has joined the chat" +
+                "</p>");
+            elem.scrollTop = elem.scrollHeight;
+        });
+    })
+</script>
+
+<body>
+    <div id="container">
+        <h1 id="title"><u>Conversation Board</u></h1>
+        <div id="chatbox"></div>
+        <input id="msg" type="text">
+        <button id="btn">Send</button>
+    </div>
+
+
+</body>

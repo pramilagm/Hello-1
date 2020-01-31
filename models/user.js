@@ -23,7 +23,9 @@ const userSchema = new Schema({
     },
 
     image: {
-        type: String
+        type: String,
+        default: './css/img/default.png'
+
     },
 
     email: {
@@ -48,6 +50,37 @@ const userSchema = new Schema({
         type: Number,
         default: 0
     },
+    sentRequest: [{
+        username: {
+            type: String,
+            default: ''
+        }
+    }],
+    request: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        username: {
+            type: String,
+            default: ''
+        }
+    }],
+
+    friendsList: [{
+        friendId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        friendName: {
+            type: String,
+            default: ''
+        }
+    }],
+    totalRequest: {
+        type: Number,
+        default: 0
+    }
 
 });
 
