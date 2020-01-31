@@ -9,21 +9,16 @@ const flash = require('connect-flash');
 const bcrypt = require('bcryptjs');
 const passportFacebook = require('passport-facebook');
 const passportGoogle = require('passport-google-oauth20');
-
-
-//Load models
-//const Message = require('./models/messages');
-//const User = require('./models/user');
 const app = express();
-
-require("./server/config/mongoose.js");
-require("./server/config/routes.js")(app);
-
+const User = require('./models/user');
+const Message = require('./models/messages');
 //load keys file
 const Keys = require('./config/keys');
-
 //Load Helpers
-const { requireLogin, ensureGuest } = require('./helpers/auth.js');
+const {
+    requireLogin,
+    ensureGuest
+} = require('./helpers/auth.js');
 
 //use body parser middleware
 app.use(bodyParser.urlencoded({
@@ -75,7 +70,9 @@ mongoose.connect(Keys.MongoDB, {
 // environment variable for port
 const port = process.env.PORT || 3000;
 //set up view engine 
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.engine('handlebars', exphbs({
+    defaultLayout: 'main'
+}));
 app.set('view engine', 'handlebars');
 
 app.get('/', ensureGuest, (req, res) => {
@@ -112,16 +109,20 @@ app.get('/auth/google/callback', passport.authenticate('google', {
     failureRedirect: '/'
 }));
 app.get('/profile', requireLogin, (req, res) => {
-    User.findById({ _id: req.user._id }).then((user) => {
+    console.log(req.user)
+    User.findById({
+        _id: req.user._id
+    }).then((user) => {
         if (user) {
             user.online = true;
             user.save((err, user) => {
                 if (err) {
                     throw err;
                 } else {
+                    console.log(user.picture)
                     res.render('profile', {
                         title: 'Profile',
-                        user: user
+                        user: user.toObject()
                     });
                 }
             });
@@ -138,10 +139,14 @@ app.post('/signup', (req, res) => {
     let errors = [];
 
     if (req.body.password !== req.body.password2) {
-        errors.push({ text: 'Password does not match' });
+        errors.push({
+            text: 'Password does not match'
+        });
     }
     if (req.body.password.length < 5) {
-        errors.push({ text: 'Password must be at least 5 characters' });
+        errors.push({
+            text: 'Password must be at least 5 characters'
+        });
     }
     if (errors.length > 0) {
         res.render('newAccount', {
@@ -153,11 +158,15 @@ app.post('/signup', (req, res) => {
             password2: req.body.password2
         });
     } else {
-        User.findOne({ email: req.body.email })
+        User.findOne({
+                email: req.body.email
+            })
             .then((user) => {
                 if (user) {
                     let errors = [];
-                    errrors.push({ text: 'Email already exists' });
+                    errors.push({
+                        text: 'Email already exists'
+                    });
                     res.render('newAccount'), {
                         title: 'SignUp',
                         errors: errors
@@ -177,7 +186,9 @@ app.post('/signup', (req, res) => {
     }
 });
 app.get('/logout', (req, res) => {
-    User.findById({ _id: req.user._id })
+    User.findById({
+            _id: req.user._id
+        })
         .then((user) => {
             user.online = false;
             user.save((err, user) => {

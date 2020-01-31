@@ -1,6 +1,6 @@
 module.exports = {
     requireLogin: (req, res, next) => {
-        if (this.req.isAuthenticated()) {
+        if (req.isAuthenticated()) {
             return next();
         } else {
             res.redirect('/');
