@@ -9,13 +9,20 @@
 .red {
   color: red;
 }
+
 .rounded {
   border-radius: 20px;
 }
-img {
+
+/* img {
   height: 45px;
   width: auto;
+} */
+.icon {
+  height: 32px;
+  width: auto;
 }
+
 #wink {
   height: 32px;
   width: auto;

@@ -1,27 +1,39 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
-    
-<a id="rounded" class="navbar-brand m-3" href="/">Hello
-<img src="img/hello.png" alt=""> </a>
-<a class="navbar-brand" href="#">{{title}}</a>
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span> </button>
 
-<div class="collapse bg-info navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
- {{#if user}}
- <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-        </li>
+    <a id="rounded" class="navbar-brand m-3" href="/">Hello
+        <img class="icon" src="img/hello.png" alt=""> </a>
+    <a class="navbar-brand" href="#">{{title}}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span> </button>
 
- {{else}}
-    <li class="nav-item active p-3">
-        <a class="nav-link" href="/about">About <span class="sr-only">(current)</span><img class="ml-5" id="wink" src="img/wink.png" alt=""> </a>
-    </li>
-    <li class="nav-item p-3">
-        <a class="nav-link" href="/contact">Contact</a>    </li> 
-{{/if}}
+    <div class="collapse bg-info navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            {{#if user}}
+            <li class="nav-item">
 
-    </ul>
-    
-</div>
+                <a class="nav-link" href="/chat">Chat </a>
+
+
+                <form class="form-inline" action="/search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+
+            </li>
+
+            {{else}}
+            <li class="nav-item active p-3">
+                <a class="nav-link" href="/about">About <span class="sr-only">(current)</span><img class="ml-5"
+                        id="wink" class="icon" src="img/wink.png" alt=""> </a>
+            </li>
+            <li class="nav-item p-3">
+                <a class="nav-link" href="/contact">Contact</a> </li>
+            {{/if}}
+
+        </ul>
+
+    </div>
 </nav>
